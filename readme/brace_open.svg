@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='ASCII' standalone='yes'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="8.0pt" viewBox="0 0 8.0 22.0" height="22.0pt">
+  <g>
+    <g transform="translate(0, 0) scale(2.0 2.0) "><defs>
+<g>
+<symbol overflow="visible" id="glyph0-0">
+<path style="stroke:none;" d=""/>
+</symbol>
+<symbol overflow="visible" id="glyph0-1">
+<path style="stroke:none;" d="M 3.296875 2.390625 C 3.296875 2.359375 3.296875 2.34375 3.125 2.171875 C 1.890625 0.921875 1.5625 -0.96875 1.5625 -2.5 C 1.5625 -4.234375 1.9375 -5.96875 3.171875 -7.203125 C 3.296875 -7.328125 3.296875 -7.34375 3.296875 -7.375 C 3.296875 -7.453125 3.265625 -7.484375 3.203125 -7.484375 C 3.09375 -7.484375 2.203125 -6.796875 1.609375 -5.53125 C 1.109375 -4.4375 0.984375 -3.328125 0.984375 -2.5 C 0.984375 -1.71875 1.09375 -0.515625 1.640625 0.625 C 2.25 1.84375 3.09375 2.5 3.203125 2.5 C 3.265625 2.5 3.296875 2.46875 3.296875 2.390625 Z M 3.296875 2.390625 "/>
+</symbol>
+</g>
+</defs>
+<g id="surface1">
+<g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
+  <use xlink:href="#glyph0-1" x="-0.256" y="8.362"/>
+</g>
+</g>
+</g>
+  </g>
+</svg>

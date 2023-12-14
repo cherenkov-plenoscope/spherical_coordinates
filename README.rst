@@ -30,6 +30,10 @@ The azimuth-zenith representation uses two floats
 (``azimuth_rad`` and ``zenith_rad``).
 The cartesian vector uses three floats (``cx``, ``cy``, and ``cz``).
 
+In equations within CORSIKA's documents, the azimuth angle is represented
+by greek letter ``Phi`` and the zenith angle is represented by
+greek letter ``Theta``. Here, we use CORSIKA's explicit names 'azimuth'
+and 'zenith' as they are used in the text body of e.g. CORSIKA's manual.
 
 .. code:: python
 
