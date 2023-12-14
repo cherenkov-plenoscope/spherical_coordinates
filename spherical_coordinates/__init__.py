@@ -19,19 +19,15 @@ def azimuth_range(azimuth_rad):
     """
     PI = np.pi
     TAU = 2.0 * PI
+    is_scalar, azimuth_rad = _dimensionality_in(x=azimuth_rad)
     # force azimuth to be the positive remainder, so that 0 <= angle < TAU
     azimuth_rad = azimuth_rad % TAU
     azimuth_rad = (azimuth_rad + TAU) % TAU
     # force into the minimum absolute value residue class
     # so that: -PI < azimuth <= PI
-    if np.isscalar(azimuth_rad):
-        if azimuth_rad > PI:
-            azimuth_rad -= TAU
-    else:
-        azimuth_rad = np.asarray(azimuth_rad)
-        mask = azimuth_rad > PI
-        azimuth_rad[mask] -= TAU
-    return azimuth_rad
+    mask = azimuth_rad > PI
+    azimuth_rad[mask] -= TAU
+    return _dimensionality_out(is_scalar, x=azimuth_rad)
 
 
 def az_zd_to_cx_cy_cz(azimuth_rad, zenith_rad):
@@ -119,16 +115,16 @@ def cx_cy_to_az_zd(cx, cy):
     """
 
     inner_sqrt = 1.0 - cx**2 - cy**2
-    if np.isscalar(inner_sqrt):
-        if inner_sqrt >= 0:
-            cz = np.sqrt(inner_sqrt)
-        else:
-            cz = float("nan")
-    else:
-        cz = np.nan * np.ones(len(inner_sqrt))
-        fine = inner_sqrt >= 0
-        cz[fine] = np.sqrt(inner_sqrt)
-    return cx_cy_cz_to_az_zd(cx=cx, cy=cy, cz=cz)
+    is_scalar, inner_sqrt = _dimensionality_in(x=inner_sqrt)
+
+    cz = np.nan * np.ones(len(inner_sqrt))
+    fine = inner_sqrt >= 0
+    cz[fine] = np.sqrt(inner_sqrt)
+    az, zd = cx_cy_cz_to_az_zd(cx=cx, cy=cy, cz=cz)
+
+    az = _dimensionality_out(is_scalar=is_scalar, x=az)
+    zd = _dimensionality_out(is_scalar=is_scalar, x=zd)
+    return az, zd
 
 
 def cx_cy_cz_to_az_zd(cx, cy, cz):
@@ -183,13 +179,16 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     """
     dot = np.dot
     norm = np.linalg.norm
+
+    is_scalar, _ = _dimensionality_in(x=cx1)
     norm1 = norm(np.c_[cx1, cy1, cz1], axis=1)
     norm2 = norm(np.c_[cx2, cy2, cz2], axis=1)
     xx = cx1 * cx2
     yy = cy1 * cy2
     zz = cz1 * cz2
     dot12 = np.sum(np.c_[xx, yy, zz], axis=1)
-    return arccos_accepting_numeric_tolerance(dot12 / (norm1 * norm2))
+    ret = arccos_accepting_numeric_tolerance(dot12 / (norm1 * norm2))
+    return _dimensionality_out(is_scalar=is_scalar, x=ret)
 
 
 def angle_between_cx_cy(cx1, cy1, cx2, cy2):
@@ -260,14 +259,8 @@ def arccos_accepting_numeric_tolerance(x, eps=1e-6):
     -------
     angle : float
     """
-    # input dimensionality
-    x = np.asarray(x)
-    scalar_input = False
-    if x.ndim == 0:
-        x = x[np.newaxis]  # Makes x 1D
-        scalar_input = True
+    is_scalar, x = _dimensionality_in(x=x)
 
-    # work
     assert eps >= 0.0
     mask = np.logical_and(x > 1.0, x < (1.0 + eps))
     x[mask] = 1.0
@@ -275,7 +268,20 @@ def arccos_accepting_numeric_tolerance(x, eps=1e-6):
     x[mask] = -1.0
     ret = np.arccos(x)
 
-    # output dimensionality
-    if scalar_input:
-        return np.squeeze(ret)
-    return ret
+    return _dimensionality_out(is_scalar=is_scalar, x=ret)
+
+
+def _dimensionality_in(x):
+    x = np.asarray(x)
+    is_scalar = False
+    if x.ndim == 0:
+        x = x[np.newaxis]  # Makes x 1D
+        is_scalar = True
+    return is_scalar, x
+
+
+def _dimensionality_out(is_scalar, x):
+    if is_scalar:
+        return np.squeeze(x)
+    else:
+        return x
