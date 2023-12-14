@@ -9,6 +9,9 @@ The transformations support both scalar and array-like in- and outputs, as in
 numpy_. Only free floating functions. No custom classes or structures.
 
 
+|img_frame|
+
+
 *******
 Install
 *******
@@ -183,3 +186,5 @@ For this ``spherical_coordinates`` has a range limiter:
 .. _CORSIKA: https://www.iap.kit.edu/corsika/index.php
 
 .. _numpy: https://numpy.org/
+
+.. |img_frame| image:: https://github.com/cherenkov-plenoscope/spherical_coordinates/blob/main/readme/frame.png?raw=True
