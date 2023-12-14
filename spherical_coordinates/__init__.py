@@ -191,6 +191,45 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     return _dimensionality_out(is_scalar=is_scalar, x=ret)
 
 
+def angle_between_xyz(a, b):
+    """
+    Returns the angle(s) between the vectors in a and b. When a and b are two
+    dimensional matrices, the angles are computed between pairs along the first
+    axis.
+
+    Parameters
+    ----------
+    a : array, shape=(3,) or shape(N, 3)
+        First vector or N vectors
+    b : array, shape=(3,) or shape(N, 3)
+        Second vector(s)
+
+    Returns
+    -------
+    anglses : float or array, shape=(N,)
+    """
+    a = np.array(a)
+    b = np.array(b)
+    assert a.shape == b.shape
+    dim = len(a.shape)
+    assert dim == 1 or dim == 2
+    if dim == 1:
+        a = a.reshape((1, a.shape[0]))
+        b = b.reshape((1, b.shape[0]))
+    ret = angle_between_cx_cy_cz(
+        cx1=a[:, 0],
+        cy1=a[:, 1],
+        cz1=a[:, 2],
+        cx2=b[:, 0],
+        cy2=b[:, 1],
+        cz2=b[:, 2],
+    )
+    if dim == 1:
+        return np.squeeze(ret)
+    else:
+        return ret
+
+
 def angle_between_cx_cy(cx1, cy1, cx2, cy2):
     """
     See angle_between_cx_cy_cz()

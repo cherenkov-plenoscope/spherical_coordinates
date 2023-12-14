@@ -141,3 +141,22 @@ def test_angles_arrays_fullsphere():
     )
     assert len(delta) == num
     assert np.all(delta < 1e-3)
+
+
+def test_angle_between_xyz():
+    N = np.pi / 2
+    R = np.pi
+    ar = np.array
+
+    x = ar([1, 0, 0])
+    y = ar([0, 1, 0])
+    z = ar([0, 0, 1])
+    aaa = [x, x, x, x]
+    bbb = [x, y, z, -x]
+    ddd = [0, N, N, R]
+
+    delta = sphcors.angle_between_xyz(a=[0, 0, 1], b=[0, 0, 1])
+    assert delta == 0.0
+
+    delta = sphcors.angle_between_xyz(a=aaa, b=bbb)
+    np.testing.assert_array_almost_equal(delta, ddd)
