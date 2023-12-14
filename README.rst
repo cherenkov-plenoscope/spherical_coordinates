@@ -33,12 +33,36 @@ The cartesian vector uses three floats (``cx``, ``cy``, and ``cz``).
 
 .. code:: python
 
-    install spherical_coordinates
+    import spherical_coordinates
 
     cx, cy, cz = spherical_coordinates.az_zd_to_cx_cy_cz(
         azimuth_rad=0.2,
         zenith_rad=0.3,
     )
+
+
+*************
+Azimuth Range
+*************
+
+From my experience, some parts in CORSIKA expect the azimuth angle to be in the
+so called 'least absolute residue'. This is:
+
+
+.. math::
+
+    - PI < azimuth_rad <= +PI
+
+For this ``spherical_coordinates`` has a range limiter:
+
+.. code:: python
+
+    import spherical_coordinates
+
+    az = spherical_coordinates.azimuth_range(azimuth_rad=123.4)
+    print(az*180/3.1415, "DEG")
+
+    -129.7046334064967 DEG
 
 
 .. |TestStatus| image:: https://github.com/cherenkov-plenoscope/spherical_coordinates/actions/workflows/test.yml/badge.svg?branch=main
