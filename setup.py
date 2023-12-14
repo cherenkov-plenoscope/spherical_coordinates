@@ -14,12 +14,14 @@ with open(os.path.join("spherical_coordinates", "version.py")) as f:
 setuptools.setup(
     name="spherical_coordinates",
     version=version,
-    description=("This is spherical_coordinates."),
+    description=(
+        "Transform spherical coordinates as it is done in KIT's CORSIKA."
+    ),
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url="https://github.com/cherenkov-plenoscope/spherical_coordinates",
     author="Sebastian A. Mueller",
-    author_email="Sebastian A. Mueller@mail",
+    author_email="sebastian-achim.mueller@mpi-hd.mpg.de",
     packages=[
         "spherical_coordinates",
     ],
