@@ -321,6 +321,6 @@ def _dimensionality_in(x):
 
 def _dimensionality_out(is_scalar, x):
     if is_scalar:
-        return np.squeeze(x)
+        return float(np.squeeze(x))
     else:
         return x

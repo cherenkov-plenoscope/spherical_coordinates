@@ -7,6 +7,39 @@ import warnings
 assert_close = np.testing.assert_almost_equal
 
 
+def test_dimensionality_float():
+    is_scalar, x_work = sphcors._dimensionality_in(float(9))
+    assert is_scalar
+    assert isinstance(x_work, np.ndarray)
+    x_out = sphcors._dimensionality_out(is_scalar, x=x_work)
+    assert isinstance(x_out, float)
+
+
+def test_dimensionality_list():
+    is_scalar, x_work = sphcors._dimensionality_in([1, 2, 3, 4])
+    assert not is_scalar
+    assert isinstance(x_work, np.ndarray)
+    x_out = sphcors._dimensionality_out(is_scalar, x=x_work)
+    assert isinstance(x_out, np.ndarray)
+
+
+def test_dimensionality_array():
+    is_scalar, x_work = sphcors._dimensionality_in(np.array([1, 2, 3, 4]))
+    assert not is_scalar
+    assert isinstance(x_work, np.ndarray)
+    x_out = sphcors._dimensionality_out(is_scalar, x=x_work)
+    assert isinstance(x_out, np.ndarray)
+
+
+def test_dimensionality_array_item():
+    arr = np.array([1, 2, 3, 4])
+    is_scalar, x_work = sphcors._dimensionality_in(arr[2])
+    assert is_scalar
+    assert isinstance(x_work, np.ndarray)
+    x_out = sphcors._dimensionality_out(is_scalar, x=x_work)
+    assert isinstance(x_out, float)
+
+
 def test_arccos():
     md_arccos = sphcors.arccos_accepting_numeric_tolerance
 
