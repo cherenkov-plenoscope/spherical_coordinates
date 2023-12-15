@@ -180,7 +180,20 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     dot = np.dot
     norm = np.linalg.norm
 
-    is_scalar, _ = _dimensionality_in(x=cx1)
+    cx1_is_scalar, cx1 = _dimensionality_in(x=cx1)
+    cy1_is_scalar, cy1 = _dimensionality_in(x=cy1)
+    cz1_is_scalar, cz1 = _dimensionality_in(x=cz1)
+
+    cx2_is_scalar, cx2 = _dimensionality_in(x=cx2)
+    cy2_is_scalar, cy2 = _dimensionality_in(x=cy2)
+    cz2_is_scalar, cz2 = _dimensionality_in(x=cz2)
+
+    assert all([cx1_is_scalar == u for u in [cy1_is_scalar, cz1_is_scalar]])
+    assert all([cx2_is_scalar == u for u in [cy2_is_scalar, cz2_is_scalar]])
+
+    first_is_scalar = cx1_is_scalar
+    second_is_scalar = cx2_is_scalar
+
     norm1 = norm(np.c_[cx1, cy1, cz1], axis=1)
     norm2 = norm(np.c_[cx2, cy2, cz2], axis=1)
     xx = cx1 * cx2
@@ -188,7 +201,10 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     zz = cz1 * cz2
     dot12 = np.sum(np.c_[xx, yy, zz], axis=1)
     ret = arccos_accepting_numeric_tolerance(dot12 / (norm1 * norm2))
-    return _dimensionality_out(is_scalar=is_scalar, x=ret)
+    return _dimensionality_out(
+        is_scalar=all([first_is_scalar, second_is_scalar]),
+        x=ret,
+    )
 
 
 def angle_between_xyz(a, b):

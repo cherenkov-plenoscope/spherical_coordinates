@@ -193,3 +193,51 @@ def test_angle_between_xyz():
 
     delta = sphcors.angle_between_xyz(a=aaa, b=bbb)
     np.testing.assert_array_almost_equal(delta, ddd)
+
+
+def test_different_dimensionality():
+    lin05 = np.linspace(0.0, 1.0, 5)
+
+    # both scalars
+    angles = sphcors.angle_between_az_zd(
+        azimuth1_rad=0.0,
+        zenith1_rad=0.0,
+        azimuth2_rad=0.0,
+        zenith2_rad=0.0,
+    )
+    assert isinstance(angles, float)
+    np.testing.assert_almost_equal(angles, 0.0)
+
+    # both vectors
+    ANGLES = sphcors.angle_between_az_zd(
+        azimuth1_rad=lin05,
+        zenith1_rad=lin05,
+        azimuth2_rad=-lin05,
+        zenith2_rad=lin05,
+    )
+    assert isinstance(ANGLES, np.ndarray)
+    assert ANGLES.shape[0] == 5
+    assert len(ANGLES.shape) == 1
+
+    # first is scalar
+    angles = sphcors.angle_between_az_zd(
+        azimuth1_rad=0,
+        zenith1_rad=0,
+        azimuth2_rad=-lin05,
+        zenith2_rad=lin05,
+    )
+    assert isinstance(angles, np.ndarray)
+    assert angles.shape[0] == 5
+    assert len(angles.shape) == 1
+    np.testing.assert_array_almost_equal(angles, lin05)
+
+    # second is scalar
+    angles = sphcors.angle_between_az_zd(
+        azimuth1_rad=lin05,
+        zenith1_rad=lin05,
+        azimuth2_rad=-1,
+        zenith2_rad=1,
+    )
+    assert isinstance(angles, np.ndarray)
+    assert angles.shape[0] == 5
+    assert len(angles.shape) == 1
