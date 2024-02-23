@@ -56,12 +56,71 @@ cartesian direction vector ``[cx, cy, cz]``.
 This python package is mostly about the transformations between this cartesian
 direction vector and the spehrical coordinates.
 
+.. math::
+
+    Az = azimuth
+    Zd = zenith distance
+
+To go from spherical to cartesian:
 
 .. math::
 
-    c_x = \cos(Az) \sin(Zd)
+    cx = sin(Zd) cos(Az)
+    cy = sin(Zd) sin(Az)
+    cz = cos(Zd)
+
+This implies the vector ``[cx, cy, cz]`` has length 1.
+
+.. math::
+
+    sqrt(cx^2 + cy^2 + cz^2) = 1
+
+To go back from cartesian to spherical:
+
+.. math::
+
+    Az = arctan2(cy, cx)
+    Zd = arccos(cz)
+
+Sometimes ``cz`` is omitted in case the usecase is always in the positive ``z`` hemisphere.
+
+.. math::
+
+    cz = sqrt(1.0 - cx^2 - cy^2)
 
 
+CORSIKA
+=======
+
+The relation to CORSIKA's coordinates is:
+
+.. math::
+
+    phi = Az - PI
+    theta = Zd
+
+for  spherical coordinates and
+
+.. math::
+
+    cx = -ux
+    cy = -vy
+    cz = -wz
+
+for cartesian coordinates.
+
+Relations inside of CORSIKA are:
+
+.. math::
+
+    ux = sin(theta) cos(phi)
+    vy = sin(theta) sin(phi)
+    wz = (-1.0) cos(theta)
+
+    phi = arctan2(vy, ux)
+    theta = (-1.0) arccos(wz)
+
+Inside the CORSIKA manual there is only ``u`` and ``v``. Here we rename ``u`` to ``ux`` and ``v`` to ``vy`` to make clear what dimension of the cartesian vector they corrspond to. Also we added ``wz`` for the ``z`` component.
 
 *****
 Usage
