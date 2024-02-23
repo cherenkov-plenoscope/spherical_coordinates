@@ -1,4 +1,6 @@
 from .version import __version__
+from . import corsika
+from . import dimensionality
 import numpy as np
 
 
@@ -19,7 +21,7 @@ def azimuth_range(azimuth_rad):
     """
     PI = np.pi
     TAU = 2.0 * PI
-    is_scalar, azimuth_rad = _dimensionality_in(x=azimuth_rad)
+    is_scalar, azimuth_rad = dimensionality._in(x=azimuth_rad)
     # force azimuth to be the positive remainder, so that 0 <= angle < TAU
     azimuth_rad = azimuth_rad % TAU
     azimuth_rad = (azimuth_rad + TAU) % TAU
@@ -27,7 +29,7 @@ def azimuth_range(azimuth_rad):
     # so that: -PI < azimuth <= PI
     mask = azimuth_rad > PI
     azimuth_rad[mask] -= TAU
-    return _dimensionality_out(is_scalar, x=azimuth_rad)
+    return dimensionality._out(is_scalar, x=azimuth_rad)
 
 
 def az_zd_to_cx_cy_cz(azimuth_rad, zenith_rad):
@@ -115,15 +117,15 @@ def cx_cy_to_az_zd(cx, cy):
     """
 
     inner_sqrt = 1.0 - cx**2 - cy**2
-    is_scalar, inner_sqrt = _dimensionality_in(x=inner_sqrt)
+    is_scalar, inner_sqrt = dimensionality._in(x=inner_sqrt)
 
     cz = np.nan * np.ones(len(inner_sqrt))
     fine = inner_sqrt >= 0
     cz[fine] = np.sqrt(inner_sqrt)
     az, zd = cx_cy_cz_to_az_zd(cx=cx, cy=cy, cz=cz)
 
-    az = _dimensionality_out(is_scalar=is_scalar, x=az)
-    zd = _dimensionality_out(is_scalar=is_scalar, x=zd)
+    az = dimensionality._out(is_scalar=is_scalar, x=az)
+    zd = dimensionality._out(is_scalar=is_scalar, x=zd)
     return az, zd
 
 
@@ -180,13 +182,13 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     dot = np.dot
     norm = np.linalg.norm
 
-    cx1_is_scalar, cx1 = _dimensionality_in(x=cx1)
-    cy1_is_scalar, cy1 = _dimensionality_in(x=cy1)
-    cz1_is_scalar, cz1 = _dimensionality_in(x=cz1)
+    cx1_is_scalar, cx1 = dimensionality._in(x=cx1)
+    cy1_is_scalar, cy1 = dimensionality._in(x=cy1)
+    cz1_is_scalar, cz1 = dimensionality._in(x=cz1)
 
-    cx2_is_scalar, cx2 = _dimensionality_in(x=cx2)
-    cy2_is_scalar, cy2 = _dimensionality_in(x=cy2)
-    cz2_is_scalar, cz2 = _dimensionality_in(x=cz2)
+    cx2_is_scalar, cx2 = dimensionality._in(x=cx2)
+    cy2_is_scalar, cy2 = dimensionality._in(x=cy2)
+    cz2_is_scalar, cz2 = dimensionality._in(x=cz2)
 
     assert all([cx1_is_scalar == u for u in [cy1_is_scalar, cz1_is_scalar]])
     assert all([cx2_is_scalar == u for u in [cy2_is_scalar, cz2_is_scalar]])
@@ -201,7 +203,7 @@ def angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2):
     zz = cz1 * cz2
     dot12 = np.sum(np.c_[xx, yy, zz], axis=1)
     ret = arccos_accepting_numeric_tolerance(dot12 / (norm1 * norm2))
-    return _dimensionality_out(
+    return dimensionality._out(
         is_scalar=all([first_is_scalar, second_is_scalar]),
         x=ret,
     )
@@ -314,7 +316,7 @@ def arccos_accepting_numeric_tolerance(x, eps=1e-6):
     -------
     angle : float
     """
-    is_scalar, x = _dimensionality_in(x=x)
+    is_scalar, x = dimensionality._in(x=x)
 
     assert eps >= 0.0
     mask = np.logical_and(x > 1.0, x < (1.0 + eps))
@@ -323,20 +325,4 @@ def arccos_accepting_numeric_tolerance(x, eps=1e-6):
     x[mask] = -1.0
     ret = np.arccos(x)
 
-    return _dimensionality_out(is_scalar=is_scalar, x=ret)
-
-
-def _dimensionality_in(x):
-    x = np.asarray(x)
-    is_scalar = False
-    if x.ndim == 0:
-        x = x[np.newaxis]  # Makes x 1D
-        is_scalar = True
-    return is_scalar, x
-
-
-def _dimensionality_out(is_scalar, x):
-    if is_scalar:
-        return float(np.squeeze(x))
-    else:
-        return x
+    return dimensionality._out(is_scalar=is_scalar, x=ret)
