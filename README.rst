@@ -6,8 +6,7 @@ Spherical Coordinates
 A python package to transform the representations of pointings. It adopts the
 naming and definitions of KIT's CORSIKA_.
 The transformations support both scalar and array-like in- and outputs, as in
-numpy_. Only free floating functions. No custom classes or structures.
-
+numpy_.
 
 |img_frame|
 
@@ -21,22 +20,52 @@ Install
     pip install spherical_coordinates
 
 
-***************
-Transformations
-***************
+*******************
+Coordinates systems
+*******************
 
-CORSIKA uses mainly two representations for directions in three dimensional
-space. First, the azimuth-zenith representation, and second cartesian
-direction vectors of length 1.
+The shower simulation CORSIKA has a mindset of particles running down in the
+atmosphere towards the surface of the earth. This is, the particles have
+(mostly) momentum into negative ``z`` direction and are running towards the
+``xy`` plane.
+Because of this, the spherical coordinates used by CORSIKA point towards the
+negative ``z`` direction by default (for phi=0, theta=0).
 
-The azimuth-zenith representation uses two floats
-(``azimuth_rad`` and ``zenith_rad``).
-The cartesian vector uses three floats (``cx``, ``cy``, and ``cz``).
+On the other hand, astronomy has a mindset of looking up into the sky, into
+positive ``z`` direction away from the ``xy`` plane.
+Because of this, the spherical coordiantes used in astronomy point towards the
+positive ``z`` direction by default (for azimuth=0, zenith distance=0).
 
-In equations within CORSIKA's documents, the azimuth angle is represented
-by greek letter ``Phi`` and the zenith angle is represented by
-greek letter ``Theta``. Here, we use CORSIKA's explicit names 'azimuth'
-and 'zenith' as they are used in the text body of e.g. CORSIKA's manual.
+CORSIKAS spherical coordinates are ``phi``-``theta``. They are used in e.g. the
+input of CORSIKA and can be defined in the steering card as ``PHIP`` and
+``THETAP``. Note in the figure how ``theta`` starts to open from the negative
+``z`` axis.
+
+On the other hand, astronomy's spherical coordinates are
+``azimuth``-``zenith distance``. (Astronomy has many coordinate systems but to
+discuss the pointing of a telescope on earth, azimuth and zenith are rather
+common).
+Note in the figure how ``zenith`` starts to open from the positive ``z`` axis.
+
+***********************************************
+Transformations between spherical and cartesian
+***********************************************
+
+Directions in spherical coordiantes ``azimuth``-``zenith`` have a corresponding
+cartesian direction vector ``[cx, cy, cz]``.
+This python package is mostly about the transformations between this cartesian
+direction vector and the spehrical coordinates.
+
+
+.. math::
+
+    c_x = \cos(Az) \sin(Zd)
+
+
+
+*****
+Usage
+*****
 
 .. code:: python
 
