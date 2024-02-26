@@ -37,9 +37,17 @@ def vy_to_cy(vy):
     return -vy
 
 
+def wz_to_cz(wz):
+    return -wz
+
+
 def cx_to_ux(cx):
     return -cx
 
 
 def cy_to_vy(cy):
     return -cy
+
+
+def cz_to_wz(cz):
+    return -cz
