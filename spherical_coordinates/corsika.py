@@ -3,11 +3,11 @@ import numpy as np
 
 
 def az_to_phi(azimuth_rad):
-    return azimuth_rad + np.pi
+    return azimuth_rad - np.pi
 
 
 def phi_to_az(phi_rad):
-    return phi_rad - np.pi
+    return phi_rad + np.pi
 
 
 def zd_to_theta(zenith_rad):
@@ -24,7 +24,8 @@ def phi_theta_to_az_zd(phi_rad, theta_rad):
 
 def az_zd_to_phi_theta(azimuth_rad, zenith_rad):
     return (
-        az_to_phi(azimuth_rad=azimuth_rad), zd_to_theta(zenith_rad=zenith_rad)
+        az_to_phi(azimuth_rad=azimuth_rad),
+        zd_to_theta(zenith_rad=zenith_rad),
     )
 
 

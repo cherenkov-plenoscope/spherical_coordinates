@@ -4,7 +4,7 @@ Spherical Coordinates
 |TestStatus| |PyPiStatus| |BlackStyle| |BlackPackStyle| |MITLicenseBadge|
 
 A python package to transform the representations of pointings. It adopts the
-naming and definitions of KIT's CORSIKA_.
+naming and definitions of `KIT's CORSIKA`_.
 The transformations support both scalar and array-like in- and outputs, as in
 numpy_.
 
@@ -36,7 +36,7 @@ positive ``z`` direction away from the ``xy`` plane.
 Because of this, the spherical coordiantes used in astronomy point towards the
 positive ``z`` direction by default (for azimuth=0, zenith distance=0).
 
-CORSIKAS spherical coordinates are ``phi``-``theta``. They are used in e.g. the
+CORSIKA's spherical coordinates are ``phi``-``theta``. They are used in e.g. the
 input of CORSIKA and can be defined in the steering card as ``PHIP`` and
 ``THETAP``. Note in the figure how ``theta`` starts to open from the negative
 ``z`` axis.
@@ -271,7 +271,7 @@ For this ``spherical_coordinates`` has a range limiter:
 .. |MITLicenseBadge| image:: https://img.shields.io/badge/License-MIT-yellow.svg
     :target: https://opensource.org/licenses/MIT
 
-.. _CORSIKA: https://www.iap.kit.edu/corsika/index.php
+.. _KIT's CORSIKA: https://www.iap.kit.edu/corsika/index.php
 
 .. _numpy: https://numpy.org/
 
