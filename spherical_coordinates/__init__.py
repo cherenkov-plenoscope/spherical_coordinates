@@ -1,6 +1,7 @@
 from .version import __version__
 from . import corsika
 from . import dimensionality
+from . import testing
 import numpy as np
 
 
