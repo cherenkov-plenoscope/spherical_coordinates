@@ -12,6 +12,6 @@ def _in(x):
 
 def _out(is_scalar, x):
     if is_scalar:
-        return float(np.squeeze(x))
+        return np.squeeze(x).item()
     else:
         return x

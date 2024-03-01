@@ -32,12 +32,18 @@ def test_dimensionality_array():
 
 
 def test_dimensionality_array_item():
-    arr = np.array([1, 2, 3, 4])
-    is_scalar, x_work = sphcors.dimensionality._in(arr[2])
-    assert is_scalar
-    assert isinstance(x_work, np.ndarray)
-    x_out = sphcors.dimensionality._out(is_scalar, x=x_work)
-    assert isinstance(x_out, float)
+    cases = {
+        "float": {"arr": np.array([1.0, 2.0, 3.0, 4.0]), "dtype": float},
+        "int": {"arr": np.array([1, 2, 3, 4]), "dtype": int},
+    }
+    for key in cases:
+        arr = cases[key]["arr"]
+        expected_dtype = cases[key]["dtype"]
+        is_scalar, x_work = sphcors.dimensionality._in(arr[2])
+        assert is_scalar
+        assert isinstance(x_work, np.ndarray)
+        x_out = sphcors.dimensionality._out(is_scalar, x=x_work)
+        assert isinstance(x_out, expected_dtype)
 
 
 def test_arccos():
