@@ -1,5 +1,5 @@
 import numpy as np
-import spherical_coordinates
+from . import base
 
 
 def draw_cx_cy_cz(prng, size=None):
@@ -24,4 +24,4 @@ def draw_cx_cy(prng, size=None):
 
 def draw_az_zd(prng, size=None):
     cx, cy, cz = draw_cx_cy_cz(prng=prng, size=size)
-    return spherical_coordinates.cx_cy_cz_to_az_zd(cx=cx, cy=cy, cz=cz)
+    return base.cx_cy_cz_to_az_zd(cx=cx, cy=cy, cz=cz)
