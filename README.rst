@@ -233,6 +233,29 @@ Quickly estimate the angle between two pointings.
     42.852624700439804 DEG
 
 
+******
+Random
+******
+
+Draw random, uniform directions from within a cone.
+
+.. code:: python
+
+    import spherical_coordinates
+    import numpy as np
+
+    prng = np.random.Generator(np.random.PCG64(132))
+
+    az, zd = spherical_coordinates.random.uniform_az_zd_in_cone(
+        prng=prng,
+        azimuth_rad=0,
+        zenith_rad=0,
+        min_half_angle_rad=0,
+        max_half_angle_rad=np.pi,
+        size=10,
+    )
+
+
 *************
 Azimuth Range
 *************
