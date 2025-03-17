@@ -289,12 +289,36 @@ def angle_between_az_zd(azimuth1_rad, zenith1_rad, azimuth2_rad, zenith2_rad):
     return angle_between_cx_cy_cz(cx1, cy1, cz1, cx2, cy2, cz2)
 
 
-def restore_cz(cx, cy):
+def restore_cz(cx, cy, eps=1e-6):
     """
     Returns the cz component of a cartesian direction vector assuming it points
-    above the x-y plane, i.e. assuming that cz > 0.
+    above the x-y plane, i.e. assuming that cz > 0. Numerical instabilities
+    will be tollerated up to (cx**2 + cy**2) - 1.0 <= 'eps'.
+
+    Parameters
+    ----------
+    cx : float or array like
+        Z component.
+    cy : float or array like
+        Y component.
+    eps : float
+        Tolerance for (cx**2 + cy**2) - 1.0 <= eps.
     """
-    return np.sqrt(1.0 - cx**2 - cy**2)
+    cx_is_scalar, cx = dimensionality._in(x=cx)
+    cy_is_scalar, cy = dimensionality._in(x=cy)
+    assert cx_is_scalar == cy_is_scalar
+
+    inner = cx**2 + cy**2
+
+    assert eps >= 0.0
+    mask_ge_one = inner >= 1.0
+    mask_le_one_plus_epsilon = inner <= (1.0 + eps)
+    mask = np.logical_and(mask_ge_one, mask_le_one_plus_epsilon)
+
+    inner[mask] = 1.0
+
+    ret = np.sqrt(1.0 - inner)
+    return dimensionality._out(is_scalar=cy_is_scalar, x=ret)
 
 
 def arccos_accepting_numeric_tolerance(x, eps=1e-6):

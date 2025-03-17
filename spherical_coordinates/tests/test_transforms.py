@@ -83,6 +83,53 @@ def test_arccos():
         v = md_arccos(np.array([0.0, 0.1, ccclll]), eps=1e-6)
 
 
+def test_restore_cz_numerics():
+    cz = sphcors.restore_cz(cx=0.0, cy=0.0, eps=0.0)
+    assert cz == 1.0
+
+    cz = sphcors.restore_cz(cx=1.0, cy=0.0, eps=0.0)
+    assert cz == 0.0
+
+    cz = sphcors.restore_cz(cx=0.0, cy=1.0, eps=0.0)
+    assert cz == 0.0
+
+    with pytest.warns(RuntimeWarning):
+        cz = sphcors.restore_cz(1.0, 1e-6, eps=0.0)
+    cz = sphcors.restore_cz(1.0, 1e-6, eps=1e-6)
+
+    with pytest.warns(RuntimeWarning):
+        cz = sphcors.restore_cz(1e-6, 1.0, eps=0.0)
+    cz = sphcors.restore_cz(1e-6, 1.0, eps=1e-6)
+
+    with pytest.warns(RuntimeWarning):
+        cz = sphcors.restore_cz(1.0 + 1e-6, 0.0, eps=0.0)
+
+    cz = sphcors.restore_cz(1.0 + 0.2e-6, 0.0, eps=1e-6)
+
+
+def test_restore_cz():
+    prng = np.random.Generator(np.random.PCG64(seed=44))
+    NUM = 10_000
+
+    cx = prng.uniform(low=-1.0, high=1.0, size=NUM)
+    cy = prng.uniform(low=-1.0, high=1.0, size=NUM)
+    cz = prng.uniform(low=0.0, high=1.0, size=NUM)
+
+    norms = np.linalg.norm(np.c_[cx, cy, cz], axis=1)
+    cx /= norms
+    cy /= norms
+    cz /= norms
+
+    # array like
+    cz_restore = sphcors.restore_cz(cx=cx, cy=cy, eps=1e-6)
+    np.testing.assert_array_almost_equal(desired=cz, actual=cz_restore)
+
+    # scalar like
+    for i in range(NUM):
+        cz_restore = sphcors.restore_cz(cx=cx[i], cy=cy[i], eps=1e-6)
+        np.testing.assert_almost_equal(desired=cz[i], actual=cz_restore)
+
+
 def test_azimuth_range():
     PI = np.pi
     assert_close(0, sphcors.azimuth_range(0))
